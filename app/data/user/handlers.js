@@ -4,6 +4,7 @@ const GitHubApi = require('github');
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const User = require('./model');
+const mongoose = require('../../services/mongoose');
 const settings = require('../../settings');
 const logger = require('../../utils/logger');
 
@@ -48,6 +49,7 @@ module.exports = { createToken, createUser, getUserById, getUserFromRequest };
 
 function signUser(user) {
   return {
+    _id: mongoose.Types.ObjectId(),
     token: jwt.sign({ userId: user.id }, settings.secret, { expiresIn: '7d' }),
     iat: moment().format(),
     exp: moment().add(7, 'days').format(),

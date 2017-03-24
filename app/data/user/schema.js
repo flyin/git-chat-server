@@ -15,6 +15,7 @@ type User {
 }
 
 type Token {
+  _id: ID!
   token: String!
   iat: String!
   exp: String!
