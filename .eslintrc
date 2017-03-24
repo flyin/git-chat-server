@@ -2,6 +2,9 @@
   "extends": [
     "eslint:recommended"
   ],
+  "globals": {
+    "Promise": true
+  },
   "env": {
     "node": true,
     "jest": true

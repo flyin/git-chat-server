@@ -9,7 +9,7 @@ const config = {
 }[process.env.NODE_ENV || 'development'];
 
 module.exports = Object.assign({}, {
-  apiPort: process.env.LISTEN_PORT || 3000,
+  apiPort: process.env.LISTEN_PORT || 8000,
 
   github: {
     callbackURL: process.env.GITHUB_CALLBACK_URL,

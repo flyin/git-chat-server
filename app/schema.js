@@ -3,9 +3,11 @@ const { makeExecutableSchema } = require('graphql-tools');
 const Channel = require('./data/channel');
 const Message = require('./data/message');
 const User = require('./data/user');
+const Settings = require('./data/settings');
 
 const rootSchema = [`
 type Query {
+  settings: Settings!
   channels: [Channel]
   messages(channelId: ID!): [Message]
   userById(id: ID!): User
@@ -47,14 +49,18 @@ const rootResolvers = {
       return [{ _id: 1, channel: '123', name: '123' }]
     },
 
+    settings() {
+      return Settings.handlers.getSettings()
+    },
+
     userById(_, { id }, context) {
       return User.handlers.getUserById({ id }, context)
     }
   }
 };
 
-const schema = [...rootSchema, ...Channel.schema, ...Message.schema, ...User.schema];
-const resolvers = merge(rootResolvers, Channel.resolvers, Message.resolvers, User.resolvers);
+const schema = [...rootSchema, ...Channel.schema, ...Message.schema, ...User.schema, ...Settings.schema];
+const resolvers = merge(rootResolvers, Channel.resolvers, Message.resolvers, User.resolvers, Settings.resolvers);
 
 const executableSchema = makeExecutableSchema({
   resolvers,
