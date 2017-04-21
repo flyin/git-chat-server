@@ -6,20 +6,15 @@ const Schema = mongoose.Schema;
 const SALT_FACTOR = 5;
 
 const Github = new Schema({
-  githubId: { type: Number, required: true },
-  accessToken: { type: String, required: true },
-  name: { type: String, default: null },
-  refreshToken: { type: String, default: null },
+  accessToken: { required: true, type: String },
+  githubId: { required: true, type: Number },
+  name: { default: null, type: String },
+  refreshToken: { default: null, type: String },
   scopes: { type: String },
 });
 
 const User = new Schema({
-  avatar: { type: String, default: null },
-  isAdmin: { type: Boolean, default: false },
-
-  github: { type: Github, required: false },
-
-  password: { default: null, type: String },
+  avatar: { default: null, type: String },
 
   email: {
     required: true,
@@ -27,7 +22,11 @@ const User = new Schema({
     type: String,
     unique: true,
     validate: [validator.isEmail, 'Email address `{VALUE}` is incorrect']
-  }
+  },
+
+  github: { required: false, type: Github },
+  isAdmin: { default: false, type: Boolean },
+  password: { default: null, type: String },
 }, {
   timestamps: true
 });

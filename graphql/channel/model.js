@@ -2,12 +2,16 @@ const mongoose = require('../../services/mongoose');
 const Schema = mongoose.Schema;
 
 const Channel = new Schema({
-  createdBy: {
-    ref: 'User',
-    type: mongoose.Schema.Types.ObjectId
-  },
-
   name: { required: true, type: String },
+
+  owner: {
+    _id: {
+      ref: 'User',
+      type: Schema.Types.ObjectId
+    },
+
+    username: { type: String }
+  },
 }, {
   timestamps: true
 });

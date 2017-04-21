@@ -1,8 +1,8 @@
 process.env.APP_ENV = 'COMMAND';
 require('dotenv').config();
 
-const logger = require('../app/utils/logger');
-const mongoose = require('../app/services/mongoose');
+const logger = require('../utils/logger');
+const mongoose = require('../services/mongoose');
 
 function clearDatabase () {
   return new global.Promise(resolve => {
@@ -10,7 +10,7 @@ function clearDatabase () {
       mongoose.connection.collections[i].remove(f => f);
     }
 
-    resolve()
+    resolve();
   });
 }
 

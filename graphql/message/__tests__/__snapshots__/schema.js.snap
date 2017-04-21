@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Channel schema test case Should create message 1`] = `
+Object {
+  "createMessage": Object {
+    "channel": Object {
+      "name": "some-channel",
+    },
+    "text": "Some message",
+  },
+}
+`;
+
+exports[`message-message-1 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-1",
+}
+`;
+
+exports[`message-message-2 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-2",
+}
+`;
+
+exports[`message-message-3 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-3",
+}
+`;
+
+exports[`message-message-4 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-4",
+}
+`;
