@@ -4,30 +4,30 @@
   "repository": "git@github.com:flyin/git-chat-example.git",
   "author": "flyin <alex@alex-web.ru>",
   "license": "MIT",
-  "main": "app/server.js",
+  "main": "server.js",
   "scripts": {
     "start": "pm2-docker process.yml",
-    "start:dev": "nodemon -e js --watch app/ --exec node app/server.js",
+    "start:dev": "nodemon -e js --watch ./ --exec node server.js",
     "test": "jest --coverage --forceExit --runInBand",
-    "test:watch": "jest --watch --coverage"
+    "test:watch": "jest --watch"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.16.1",
     "bcrypt": "^1.0.2",
     "dotenv": "^4.0.0",
     "github": "^9.2.0",
-    "graphql": "^0.9.1",
-    "graphql-server-koa": "^0.6.0",
-    "graphql-tools": "^0.10.1",
+    "graphql": "^0.9.3",
+    "graphql-server-koa": "^0.7.1",
+    "graphql-tools": "^0.11.0",
     "jsonwebtoken": "^7.3.0",
     "kcors": "^2.2.0",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
     "koa-logger": "^2.0.1",
-    "koa-router": "^7.1.0",
+    "koa-router": "^7.1.1",
     "lodash": "^4.17.4",
-    "moment": "^2.18.0",
-    "mongoose": "^4.9.1",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.5",
     "socket.io": "^1.7.3",
     "socket.io-emitter": "^2.0.0",
     "socket.io-redis": "^4.0.0",
@@ -35,17 +35,16 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
+    "eslint": "^3.19.0",
     "jest": "^19.0.2",
     "jest-cli": "^19.0.2",
     "nodemon": "^1.11.0"
   },
   "jest": {
     "collectCoverageFrom": [
-      "app/**/*.js"
+      "graphql/**/*.js"
     ],
     "coveragePathIgnorePatterns": [
-      "<rootDir>/app/utils",
       "/__tests__/",
       "\\.(test|spec)\\.js$"
     ],
@@ -54,9 +53,9 @@
       "json"
     ],
     "modulePaths": [
-      "<rootDir>/app/"
+      "<rootDir>"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/app/utils/test-setup.js",
+    "setupTestFrameworkScriptFile": "<rootDir>/utils/test-setup.js",
     "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.js$"
   }

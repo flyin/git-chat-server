@@ -13,24 +13,26 @@ function createToken({ code, email, password }) {
     throw new Error('Only code or login+password allowed');
   }
 
-  return code ? githubLogin(code).then(user => signUser(user)) : userLogin(email, password).then(user => signUser(user));
+  return code
+    ? githubLogin(code).then(user => signUser(user))
+    : userLogin(email, password).then(user => signUser(user));
 }
 
 async function createUser(user) {
   return await User.create(user);
 }
 
-const getUserById = async ({ id }, context) => {
+const getUser = async ({ userId }, context) => {
   const currentUser = context.currentUser && await context.currentUser.get();
 
-  if (!currentUser || !currentUser.isAdmin || id !== currentUser.id) {
+  if (!currentUser || !currentUser.isAdmin || userId !== currentUser.id) {
     throw new Error('access_denied');
   }
 
-  return await User.findById(id);
+  return User.findById(userId);
 };
 
-async function getUserFromRequest({ headers, query }) {
+function getUserFromRequest({ headers, query }) {
   let token = get(headers, 'authorization') || get(query, 'access_token');
 
   if (!token) {
@@ -45,40 +47,44 @@ async function getUserFromRequest({ headers, query }) {
   }
 }
 
-module.exports = { createToken, createUser, getUserById, getUserFromRequest };
+module.exports = { createToken, createUser, getUser, getUserFromRequest };
 
 function signUser(user) {
   return {
     _id: mongoose.Types.ObjectId(),
-    token: jwt.sign({ userId: user.id }, settings.secret, { expiresIn: '7d' }),
-    iat: moment().format(),
     exp: moment().add(7, 'days').format(),
+    iat: moment().format(),
+    token: jwt.sign({ userId: user.id }, settings.secret, { expiresIn: '7d' }),
     user
   }
 }
 
 async function githubLogin(code) {
   const response = await axios({
-    method: 'post',
-    url: 'https://github.com/login/oauth/access_token',
+    data: {
+      client_id: settings.github.clientId,
+      client_secret: settings.github.clientSecret,
+      code
+    },
 
     headers: {
       'Accept': 'application/json'
     },
 
-    data: {
-      code,
-      client_id: settings.github.clientId,
-      client_secret: settings.github.clientSecret
-    }
+    method: 'post',
+    url: 'https://github.com/login/oauth/access_token',
   });
 
   if (!response.data.access_token) {
     throw new Error(get(response.data, 'error_description', 'oauth_receive_error'));
   }
 
-  const client = getGithubClient();
-  client.authenticate({ type: 'oauth', token: response.data.access_token });
+  const client = createGithubClient();
+
+  client.authenticate({
+    token: response.data.access_token,
+    type: 'oauth'
+  });
 
   const userResponse = await client.users.get({});
   let emailsResponse;
@@ -87,17 +93,15 @@ async function githubLogin(code) {
     emailsResponse = await client.users.getEmails({ page: 1 });
   }
 
-  console.log(userResponse.data);
-
-  return await User.findOneAndUpdate(
+  return User.findOneAndUpdate(
     { email: userResponse.data.email || (find(emailsResponse.data, { primary: true, verified: true }) || {}).email },
 
     {
       avatar: userResponse.data.avatar_url,
 
       github: {
-        githubId: userResponse.data.id,
         accessToken: response.data.access_token,
+        githubId: userResponse.data.id,
         name: userResponse.data.name,
         scopes: userResponse.data.scopes
       }
@@ -123,22 +127,21 @@ class LazyUser {
     this._user = null;
   }
 
-  async get() {
+  onReject(err) {
+    logger.error(err);
+    this._user = null;
+  }
+
+  get() {
     if (this._user) {
       return this._user;
     }
 
-    try {
-      this._user = await User.findOne({ _id: this.id });
-      return this._user;
-    } catch (err) {
-      logger.error(err);
-      this._user = null;
-      return this._user;
-    }
+    this._user = User.findOne({ _id: this.id }).catch(this.onReject);
+    return this._user;
   }
 }
 
-function getGithubClient() {
+function createGithubClient() {
   return new GitHubApi({ debug: !settings.isProduction, headers: { 'user-agent': '@flyin/git-chat-server' } });
 }

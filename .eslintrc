@@ -13,8 +13,8 @@
     "moduleDirectory": ["node_modules", "app"]
   },
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
+    "ecmaVersion": 8,
+    "sourceType": "module"
   },
   "rules": {
     "new-cap": 0,
