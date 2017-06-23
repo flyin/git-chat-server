@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/chat-server
+    working_directory: ~/git-chat-server
     docker:
       - image: node:8
       - image: mongo:latest
