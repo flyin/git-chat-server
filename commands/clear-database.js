@@ -1,6 +1,3 @@
-process.env.APP_ENV = 'COMMAND';
-require('dotenv').config();
-
 const logger = require('../utils/logger');
 const mongoose = require('../services/mongoose');
 
@@ -17,13 +14,18 @@ function clearDatabase () {
 module.exports = { clearDatabase };
 
 if (require.main === module) {
-  mongoose.connection.once('open', () => {
-    clearDatabase()
+  process.env.APP_ENV = 'COMMAND';
+  require('dotenv').config();
+
+  mongoose.connection.once(
+    'open',
+
+    () => clearDatabase()
       .then(() => {
-        logger.info('Clear database completed');
+        logger.info('Completed');
         mongoose.disconnect();
       })
 
       .catch(err => logger.error(err))
-  });
+  );
 }

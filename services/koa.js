@@ -5,21 +5,28 @@ const koaBody = require('koa-bodyparser');
 const koaLogger = require('koa-logger');
 const { graphqlKoa, graphiqlKoa } = require('graphql-server-koa');
 const schema = require('../graphql/schema');
-const User = require('../graphql/user');
+const { getRequestUser } = require('../graphql/user/handlers');
+const settings = require('../settings');
 
 const koa = new Koa();
 const router = new KoaRouter();
 
 router.post('/', koaBody(), graphqlKoa(async (ctx) => ({
-  context: { currentUser: User.handlers.getUserFromRequest({headers: ctx.req.headers, query: ctx.query}) },
+  context: { currentUser: getRequestUser({ headers: ctx.req.headers, query: ctx.query }) },
   schema
 })));
 
-router.get('/graphiql', graphiqlKoa({ endpointURL: '/' }));
+router.get('/graphiql', graphiqlKoa({
+  endpointURL: '/',
+  subscriptionsEndpoint: `ws://127.0.0.1:${settings.apiPort}/subscriptions`
+}));
 
 koa.use(koaLogger());
 koa.use(koaCors());
 koa.use(router.routes());
 koa.use(router.allowedMethods());
 
-module.exports = koa;
+module.exports = {
+  koa,
+  schema
+};

@@ -1,12 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Channel schema test case Should create message 1`] = `
+exports[`Chat schema test case Should create channel 1`] = `
+Object {
+  "createChannel": Object {
+    "name": "test-foo",
+  },
+}
+`;
+
+exports[`Chat schema test case Should create message 1`] = `
 Object {
   "createMessage": Object {
     "channel": Object {
       "name": "some-channel",
     },
     "text": "Some message",
+  },
+}
+`;
+
+exports[`Chat schema test case Should return all channels 1`] = `
+Object {
+  "channels": Array [
+    Object {
+      "name": "asasd",
+    },
+    Object {
+      "name": "test-foo",
+    },
+    Object {
+      "name": "test-foo1",
+    },
+  ],
+}
+`;
+
+exports[`Chat schema test case Should return channel by id 1`] = `
+Object {
+  "channel": Object {
+    "name": "test-foo",
   },
 }
 `;

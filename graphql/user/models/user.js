@@ -1,6 +1,6 @@
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-const mongoose = require('../../services/mongoose');
+const mongoose = require('../../../services/mongoose');
 
 const Schema = mongoose.Schema;
 const SALT_FACTOR = 5;

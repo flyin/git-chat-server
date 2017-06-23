@@ -1,6 +1,5 @@
 module.exports = {
   handlers: require('./handlers'),
-  model: require('./model'),
-  resolvers: require('./resolvers'),
+  models: require('./models'),
   schema: require('./schema')
 };

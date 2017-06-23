@@ -1,9 +1,10 @@
 const { merge } = require('lodash');
 const { makeExecutableSchema } = require('graphql-tools');
-const Channel = require('./channel');
-const Message = require('./message');
-const User = require('./user');
+
+
+const Chat = require('./chat');
 const Settings = require('./settings');
+const User = require('./user');
 
 const rootSchema = [`
 type Query {
@@ -22,60 +23,37 @@ type Mutation {
   createTokenByCode(code: String!): Token
   createTokenByPassword(email: String! password: String!): Token
 }
+
+type Subscription {
+  onMessage(channelId: ID!): Message
+}
 `];
 
 const rootResolvers = {
   Mutation: {
-    createChannel(_, { name }, context) {
-      return Channel.handlers.createChannel({ name }, context);
-    },
-
-    createMessage(_, { channelId, text }, context) {
-      return Message.handlers.createMessage({ channelId, text }, context);
-    },
-
-    createTokenByCode(_, { code }) {
-      return User.handlers.createToken({ code });
-    },
-
-    createTokenByPassword(_, { email, password }) {
-      return User.handlers.createToken({ email, password });
-    },
-
-    createUser(_, { email, password }) {
-      return User.handlers.createUser({ email, password });
-    },
+    createChannel: (_, { name }, context) => Chat.handlers.createChannel({ name }, context),
+    createMessage: (_, { channelId, text }, context) => Chat.handlers.createMessage({ channelId, text }, context),
+    createTokenByCode: (_, { code }) => User.handlers.createToken({ code }),
+    createTokenByPassword: (_, { email, password }) => User.handlers.createToken({ email, password }),
+    createUser: (_, { email, password }) => User.handlers.createUser({ email, password }),
   },
 
   Query: {
-    channel(_, { channelId }, context) {
-      return Channel.handlers.getChannel({ channelId }, context);
-    },
+    channel: (_, { channelId }, context) => Chat.handlers.getChannel({ channelId }, context),
+    channels: (_, { userId }, context) => Chat.handlers.getChannels({ userId }, context),
+    me: (_root, _args, context) => context.currentUser && context.currentUser.get(),
+    messages: (_, { channelId }, context) => Chat.handlers.getMessages({ channelId }, context),
+    settings: () => Settings.handlers.getSettings(),
+    user: (_, { userId }, context) => User.handlers.getUser({ userId }, context)
+  },
 
-    channels(_, { userId }, context) {
-      return Channel.handlers.getChannels({ userId }, context);
-    },
-
-    me(root, args, context) {
-      return context.currentUser && context.currentUser.get();
-    },
-
-    messages(_, { channelId }) {
-      return Message.handlers.getMessages({ channelId });
-    },
-
-    settings() {
-      return Settings.handlers.getSettings()
-    },
-
-    user(_, { userId }, context) {
-      return User.handlers.getUser({ userId }, context);
-    }
+  Subscription: {
+    onMessage: Chat.handlers.onMessage
   }
 };
 
-const schema = [...rootSchema, ...Channel.schema, ...Message.schema, ...User.schema, ...Settings.schema];
-const resolvers = merge(rootResolvers, Channel.resolvers, Message.resolvers, User.resolvers, Settings.resolvers);
+const schema = [...rootSchema, ...Chat.schema, ...User.schema, ...Settings.schema];
+const resolvers = merge(rootResolvers);
 
 const executableSchema = makeExecutableSchema({
   resolvers,
