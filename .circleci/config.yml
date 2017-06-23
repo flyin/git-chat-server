@@ -17,6 +17,9 @@ jobs:
           paths:
             - .node_modules
       - run:
+          name: prepare-env
+          command: envsubst < ./.env.template > .env
+      - run:
           name: test
           command: yarn run test
       - store_artifacts:
