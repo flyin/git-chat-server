@@ -10,8 +10,8 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
-          name: install-npm-wee
-          command: npm install
+          name: install-packages
+          command: yarn --non-interactive --no-progress
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
