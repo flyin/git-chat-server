@@ -39,6 +39,8 @@ jobs:
             echo '----------------------------'
             ls -la ~/git-chat-server
             echo '----------------------------'
+            ls -la ./node_modules/.bin
+            echo '----------------------------'
 
       - run:
           name: Test application
