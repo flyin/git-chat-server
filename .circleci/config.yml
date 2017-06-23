@@ -2,9 +2,11 @@ version: 2
 jobs:
   build:
     working_directory: ~/git-chat-server
+
     docker:
       - image: node:8
       - image: mongo:latest
+
     steps:
       - checkout
 
@@ -19,17 +21,22 @@ jobs:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
 
       - run:
-          name: Install
+          name: Install NPM packages
           command: yarn --non-interactive --no-progress
 
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - node_modules
+            - ~/.cache/yarn
 
       - run:
-          name: test
+          name: Test application
           command: yarn run test
+
+      - run:
+          name: Remove ENV file
+          command: rm .env
 
       - store_artifacts:
           path: coverage
