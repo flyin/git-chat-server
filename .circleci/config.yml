@@ -39,7 +39,7 @@ jobs:
             echo '----------------------------'
             ls -la ~/git-chat-server
             echo '----------------------------'
-            ls -la ./node_modules/.bin
+            ls -la ~/git-chat-server/node_modules
             echo '----------------------------'
 
       - run:
