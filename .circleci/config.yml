@@ -32,7 +32,7 @@ jobs:
 
       - run:
           name: Test application
-          command: npm test
+          command: ./node_modules/.bin/jest --coverage --forceExit --runInBand
 
       - run:
           name: Remove ENV file
