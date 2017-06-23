@@ -7,21 +7,30 @@ jobs:
       - image: mongo:latest
     steps:
       - checkout
+
+      - run:
+          name: Prepare environment
+          command: |
+            apt-get update -qq
+            apt-get install -y --force-yes gettext-base
+            envsubst < ./.env.template > .env
+
       - restore_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+
       - run:
-          name: install-packages
+          name: Install
           command: yarn --non-interactive --no-progress
+
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-            - .node_modules
-      - run:
-          name: prepare-env
-          command: envsubst < ./.env.template > .env
+            - node_modules
+
       - run:
           name: test
           command: yarn run test
+
       - store_artifacts:
           path: coverage
           prefix: coverage
