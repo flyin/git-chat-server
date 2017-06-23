@@ -29,10 +29,20 @@ jobs:
           paths:
             - node_modules
             - ~/.cache/yarn
+      - run:
+          name: LS
+          command: |
+            echo '----------------------------'
+            ls -la
+            echo '----------------------------'
+            ls -la ~/
+            echo '----------------------------'
+            ls -la ~/git-chat-server
+            echo '----------------------------'
 
       - run:
           name: Test application
-          command: ./node_modules/.bin/jest --coverage --forceExit --runInBand
+          command: ~/git-chat-server/node_modules/.bin/jest --coverage --forceExit --runInBand
 
       - run:
           name: Remove ENV file
