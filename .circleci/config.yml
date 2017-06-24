@@ -4,8 +4,8 @@ jobs:
     working_directory: ~/git-chat-server
 
     docker:
-      - image: node:8
-      - image: mongo:latest
+      - image: node:8.1.2
+      - image: mongo:3.4.5
 
     steps:
       - checkout
@@ -22,13 +22,13 @@ jobs:
 
       - run:
           name: Install NPM packages
-          command: yarn --non-interactive --no-progress
+          command: yarn --non-interactive --no-progress --pure-lockfile --cache-folder=/root/yarn
 
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - node_modules
-            - ~/.cache/yarn
+            - /root/yarn
 
       - run:
           name: Test application
