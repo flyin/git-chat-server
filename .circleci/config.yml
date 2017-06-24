@@ -1,0 +1,59 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/git-chat-server
+
+    docker:
+      - image: circleci/node:8
+        environment:
+          NODE_ENV: test
+
+      - image: mongo:3.4.5
+
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare environment
+          command: |
+            sudo apt-get update -qq
+            sudo apt-get install -y --force-yes gettext-base
+            envsubst < ./.env.template > .env
+
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+
+      - run:
+          name: Install NPM packages
+          command: yarn --non-interactive --no-progress --pure-lockfile
+
+      - save_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - ~/.cache/yarn
+
+      - run:
+          name: Test application
+          command: yarn run test
+
+      - run:
+          name: Remove ENV file
+          command: rm .env
+
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+
+      - setup_remote_docker
+
+      - deploy:
+          name: Master branch deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              TAG=$(node -p -e "require('./package.json').version").build-$CIRCLE_BUILD_NUM
+              docker build -t flyin/chat-server:$TAG -t flyin/chat-server:latest .
+              /home/flyin/code/alexweb/alexweb-api/.dockerignore -u $DOCKER_USER -p $DOCKER_PASS
+              docker push flyin/chat-server:$TAG
+              docker push flyin/chat-server:latest
+            fi

@@ -1,0 +1,12 @@
+.circleci
+.git
+coverage/
+node_modules/
+.env
+.env.example
+.eslintignore
+.eslintrc
+.gitignore
+docker-compose.yml
+LICENSE
+README.md
