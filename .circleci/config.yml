@@ -36,10 +36,6 @@ jobs:
           name: Test application
           command: yarn run test
 
-      - run:
-          name: Remove ENV file
-          command: rm .env
-
       - store_artifacts:
           path: coverage
           prefix: coverage
