@@ -25,7 +25,7 @@ jobs:
 
       - run:
           name: Install NPM packages
-          command: yarn --non-interactive --no-progress --pure-lockfile
+          command: yarn --non-interactive --no-progress --pure-lockfile --check-files
 
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
