@@ -16,10 +16,12 @@ router.post('/', koaBody(), graphqlKoa(async (ctx) => ({
   schema
 })));
 
-router.get('/graphiql', graphiqlKoa({
-  endpointURL: '/',
-  subscriptionsEndpoint: `ws://127.0.0.1:${settings.apiPort}/subscriptions`
-}));
+if (!settings.isProduction) {
+  router.get('/graphiql', graphiqlKoa({
+    endpointURL: '/',
+    subscriptionsEndpoint: `ws://127.0.0.1:${settings.apiPort}/subscriptions`
+  }));
+}
 
 koa.use(koaLogger());
 koa.use(koaCors());
