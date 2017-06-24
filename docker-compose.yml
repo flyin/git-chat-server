@@ -1,0 +1,11 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - 127.0.0.1:27017:27017
+
+  redis:
+    image: redis:latest
+    ports:
+      - 127.0.0.1:6379:6379

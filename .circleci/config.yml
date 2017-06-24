@@ -53,7 +53,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               TAG=$(node -p -e "require('./package.json').version").build-$CIRCLE_BUILD_NUM
               docker build -t flyin/chat-server:$TAG -t flyin/chat-server:latest .
-              /home/flyin/code/alexweb/alexweb-api/.dockerignore -u $DOCKER_USER -p $DOCKER_PASS
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker push flyin/chat-server:$TAG
               docker push flyin/chat-server:latest
             fi

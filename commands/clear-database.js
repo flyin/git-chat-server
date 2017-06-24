@@ -1,8 +1,5 @@
-process.env.APP_ENV = 'COMMAND';
-require('dotenv').config();
-
-const logger = require('../app/utils/logger');
-const mongoose = require('../app/services/mongoose');
+const logger = require('../utils/logger');
+const mongoose = require('../services/mongoose');
 
 function clearDatabase () {
   return new global.Promise(resolve => {
@@ -10,20 +7,25 @@ function clearDatabase () {
       mongoose.connection.collections[i].remove(f => f);
     }
 
-    resolve()
+    resolve();
   });
 }
 
 module.exports = { clearDatabase };
 
 if (require.main === module) {
-  mongoose.connection.once('open', () => {
-    clearDatabase()
+  process.env.APP_ENV = 'COMMAND';
+  require('dotenv').config();
+
+  mongoose.connection.once(
+    'open',
+
+    () => clearDatabase()
       .then(() => {
-        logger.info('Clear database completed');
+        logger.info('Completed');
         mongoose.disconnect();
       })
 
       .catch(err => logger.error(err))
-  });
+  );
 }
