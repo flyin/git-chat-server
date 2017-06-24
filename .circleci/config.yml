@@ -5,6 +5,9 @@ jobs:
 
     docker:
       - image: circleci/node:8
+        environment:
+          NODE_ENV: test
+
       - image: mongo:3.4.5
 
     steps:
@@ -22,13 +25,13 @@ jobs:
 
       - run:
           name: Install NPM packages
-          command: yarn --non-interactive --no-progress --pure-lockfile --cache-folder=~/yarn
+          command: yarn --non-interactive --no-progress --pure-lockfile
 
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - node_modules
-            - ~/yarn
+            - ~/.cache/yarn
 
       - run:
           name: Test application
