@@ -29,22 +29,10 @@ jobs:
           paths:
             - node_modules
             - ~/.cache/yarn
-      - run:
-          name: LS
-          command: |
-            echo '----------------------------'
-            ls -la
-            echo '----------------------------'
-            ls -la ~/
-            echo '----------------------------'
-            ls -la ~/git-chat-server
-            echo '----------------------------'
-            ls -la ~/git-chat-server/node_modules
-            echo '----------------------------'
 
       - run:
           name: Test application
-          command: ~/git-chat-server/node_modules/.bin/jest --coverage --forceExit --runInBand
+          command: yarn run test
 
       - run:
           name: Remove ENV file
@@ -53,3 +41,25 @@ jobs:
       - store_artifacts:
           path: coverage
           prefix: coverage
+
+      - setup_remote_docker
+
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.05.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+      - deploy:
+          name: Master branch deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              TAG=$(node -p -e "require('./package.json').version").build-$CIRCLE_BUILD_NUM
+              docker build -t flyin/chat-server:$TAG -t flyin/chat-server:latest .
+              docker push flyin/chat-server:$TAG
+              docker push flyin/chat-server:latest
+            fi
