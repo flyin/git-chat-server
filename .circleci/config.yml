@@ -21,16 +21,15 @@ jobs:
             envsubst < ./.env.template > .env
 
       - restore_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          key: dependencies--{{ .Branch }}--{{ checksum "package.json" }}
 
       - run:
           name: Install NPM packages
           command: yarn --non-interactive --no-progress --pure-lockfile --check-files
 
       - save_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          key: dependencies--{{ .Branch }}--{{ checksum "package.json" }}
           paths:
-            - node_modules
             - ~/.cache/yarn
 
       - run:
