@@ -1,11 +1,12 @@
 {
   "name": "git-chat-server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "repository": "git@github.com:flyin/git-chat-example.git",
   "author": "flyin <alex@alex-web.ru>",
   "license": "MIT",
   "main": "server.js",
   "scripts": {
+    "eslint": "eslint .",
     "start": "pm2-docker process.yml",
     "start:dev": "nodemon -e js --watch ./ --exec node server.js",
     "test": "jest --coverage --forceExit --runInBand",
