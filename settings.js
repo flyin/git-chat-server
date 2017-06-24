@@ -5,6 +5,10 @@ const config = {
 
   production: {
     isProduction: true
+  },
+
+  test: {
+    mongoURL: `${process.env.MONGO_URL}-test`
   }
 }[process.env.NODE_ENV || 'development'];
 

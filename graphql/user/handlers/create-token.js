@@ -1,14 +1,14 @@
 const { get, find } = require('lodash');
 const axios = require('axios');
-const GitHubApi = require('github');
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
-const User = require('./model');
-const mongoose = require('../../services/mongoose');
-const settings = require('../../settings');
-const logger = require('../../utils/logger');
+const GitHubApi = require('github');
 
-function createToken({ code, email, password }) {
+const settings = require('../../../settings');
+const mongoose = require('../../../services/mongoose');
+const { userModel } = require('../models');
+
+module.exports = ({ code, email, password }) => {
   if (code && (email || password)) {
     throw new Error('Only code or login+password allowed');
   }
@@ -16,38 +16,7 @@ function createToken({ code, email, password }) {
   return code
     ? githubLogin(code).then(user => signUser(user))
     : userLogin(email, password).then(user => signUser(user));
-}
-
-async function createUser(user) {
-  return await User.create(user);
-}
-
-const getUser = async ({ userId }, context) => {
-  const currentUser = context.currentUser && await context.currentUser.get();
-
-  if (!currentUser || !currentUser.isAdmin || userId !== currentUser.id) {
-    throw new Error('access_denied');
-  }
-
-  return User.findById(userId);
 };
-
-function getUserFromRequest({ headers, query }) {
-  let token = get(headers, 'authorization') || get(query, 'access_token');
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const payload = jwt.verify(token, settings.secret);
-    return new LazyUser(payload.userId);
-  } catch (err) {
-    return null;
-  }
-}
-
-module.exports = { createToken, createUser, getUser, getUserFromRequest };
 
 function signUser(user) {
   return {
@@ -93,7 +62,7 @@ async function githubLogin(code) {
     emailsResponse = await client.users.getEmails({ page: 1 });
   }
 
-  return User.findOneAndUpdate(
+  return userModel.findOneAndUpdate(
     { email: userResponse.data.email || (find(emailsResponse.data, { primary: true, verified: true }) || {}).email },
 
     {
@@ -112,7 +81,7 @@ async function githubLogin(code) {
 }
 
 async function userLogin(email, password) {
-  const user = await User.findOne({ email });
+  const user = await userModel.findOne({ email });
 
   if (!user || !await user.passwordIsValid(password)) {
     throw new Error('Login or password incorrect')
@@ -121,27 +90,7 @@ async function userLogin(email, password) {
   return user;
 }
 
-class LazyUser {
-  constructor(id) {
-    this.id = id;
-    this._user = null;
-  }
-
-  onReject(err) {
-    logger.error(err);
-    this._user = null;
-  }
-
-  get() {
-    if (this._user) {
-      return this._user;
-    }
-
-    this._user = User.findOne({ _id: this.id }).catch(this.onReject);
-    return this._user;
-  }
-}
-
 function createGithubClient() {
   return new GitHubApi({ debug: !settings.isProduction, headers: { 'user-agent': '@flyin/git-chat-server' } });
 }
+
