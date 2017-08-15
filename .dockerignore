@@ -1,12 +1,15 @@
 .circleci
 .git
-coverage/
 node_modules/
+coverage/
+.dockerignore
+.editorconfig
 .env
 .env.example
 .eslintignore
 .eslintrc
 .gitignore
 docker-compose.yml
+Dockerfile
 LICENSE
 README.md
