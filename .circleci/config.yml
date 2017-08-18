@@ -46,6 +46,7 @@ jobs:
           name: Master branch deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              yarn run build
               TAG=$(node -p -e "require('./package.json').version").build-$CIRCLE_BUILD_NUM
               docker build -t flyin/chat-server:$TAG -t flyin/chat-server:latest .
               docker login -u $DOCKER_USER -p $DOCKER_PASS

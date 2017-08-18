@@ -8,7 +8,7 @@
   "scripts": {
     "start:dev": "concurrently 'npm run tsc:watch' 'npm run server:dev'",
     "server:dev": "just-wait -p dist/server.js && NODE_PATH=./dist nodemon --watch dist bin/server.js",
-    "build": "tsc",
+    "build": "rimraf ./dist/ && tsc",
     "tsc:watch": "tsc -w",
     "test": "jest --forceExit",
     "test:watch": "jest --watch"
@@ -58,6 +58,7 @@
     "jest-cli": "^20.0.4",
     "just-wait": "^1.0.11",
     "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1",
     "ts-jest": "^20.0.10",
     "typescript": "^2.4.2"
   },
