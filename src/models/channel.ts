@@ -12,9 +12,9 @@ const Channel = new Schema({
     },
 
     username: { type: String }
-  },
+  }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Channel', Channel);
+mongoose.model('Channel', Channel);

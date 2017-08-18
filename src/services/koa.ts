@@ -1,5 +1,6 @@
 import * as Koa from 'koa';
 import settings from 'settings';
+import { UserModel } from 'models/user';
 
 const KoaRouter = require('koa-router');
 const koaCors = require('kcors');
@@ -10,6 +11,10 @@ const schema = require('../schema');
 
 const koa = new Koa();
 const router = new KoaRouter();
+
+export interface GraphQLContext {
+  currentUser: Promise<UserModel>
+}
 
 router.post('/', koaBody(), graphqlKoa(async () => ({
   // context: { currentUser: getRequestUser({ headers: ctx.req.headers, query: ctx.query }) },
@@ -28,4 +33,4 @@ koa.use(koaCors());
 koa.use(router.routes());
 koa.use(router.allowedMethods());
 
-module.exports = { koa, schema };
+export { koa, schema };

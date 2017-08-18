@@ -1,4 +1,4 @@
-import { mongoose, dbConnect } from 'services/mongoose';
+import { dbConnect, mongoose } from 'services/mongoose';
 import { clearDatabase } from 'commands/clear-database';
 
 export const initTestCase = () => {

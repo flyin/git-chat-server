@@ -15,10 +15,10 @@ dbConnect().then(() => {
     new SubscriptionServer({
       execute,
       schema,
-      subscribe,
+      subscribe
     }, {
       path: '/subscriptions',
-      server,
+      server
     });
 
     logger.info(`Listening: http://0.0.0.0:${settings.apiPort}`);

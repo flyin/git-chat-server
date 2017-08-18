@@ -6,8 +6,8 @@
 
 // const User = mongoose.model('User');
 
-module.exports = async (_: any, /*{ code }: { code: string }*/) => {
-  return Promise.reject({err: new Error('Not implemented yet')});
+export default async (_: any /*{ code }: { code: string }*/) => {
+  return Promise.reject({ err: new Error('Not implemented yet') });
 
   /*
   const response = await Axios({

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user resolvers mutation user can register with email and password 1`] = `
+Object {
+  "createUser": Object {
+    "email": "a@b.ru",
+    "isAdmin": false,
+  },
+}
+`;
+
+exports[`user resolvers mutation user cant register with invalid data 1`] = `
+Array [
+  [GraphQLError: User validation failed: email: Email address \`a@\` is incorrect],
+]
+`;

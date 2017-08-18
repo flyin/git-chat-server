@@ -12,9 +12,9 @@ const schema = new Schema({
     name: { type: String }
   },
 
-  text: { required: true, type: String },
+  text: { required: true, type: String }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Message', schema);
+mongoose.model('Message', schema);

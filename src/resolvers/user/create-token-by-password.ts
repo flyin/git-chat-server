@@ -4,7 +4,7 @@ import { UserModel } from 'models/user';
 
 const User = mongoose.model<UserModel>('User');
 
-module.exports = async (_: any, { email, password }: { email: string, password: string }) => {
+export default async (_: any, { email, password }: { email: string, password: string }) => {
   const user = await User.findOne({ email });
 
   if (!user || !user.id || !await user.passwordIsValid(password)) {

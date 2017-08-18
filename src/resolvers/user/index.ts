@@ -1,11 +1,16 @@
+import createUser from './create-user';
+import createTokenByPassword from './create-token-by-password';
+import createTokenByCode from './create-token-by-code';
+import getUser from './get-user';
+
 export default {
   Mutation: {
-    createTokenByCode: require('./create-token-by-code'),
-    createTokenByPassword: require('./create-token-by-password'),
-    createUser: require('./create-user')
+    createTokenByCode,
+    createTokenByPassword,
+    createUser
   },
 
   Query: {
-    getUser: require('./get-user')
+    getUser
   }
 };

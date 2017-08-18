@@ -1,4 +1,4 @@
-import { mongoose, dbConnect } from 'services/mongoose';
+import { dbConnect, mongoose } from 'services/mongoose';
 import logger from 'utils/logger';
 
 export function clearDatabase() {

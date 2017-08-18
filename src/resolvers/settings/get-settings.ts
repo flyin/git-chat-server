@@ -1,7 +1,7 @@
 import * as url from 'url';
 import settings from 'settings';
 
-module.exports = () => ({
+export default () => ({
   _id: 'app-settings',
 
   github: {

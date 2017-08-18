@@ -1,9 +1,9 @@
-import { Schema, MongooseThenable } from 'mongoose';
+import { Mongoose, MongooseThenable, Schema } from 'mongoose';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import settings from 'settings';
 
-const mongoose = require('mongoose');
+const mongoose: Mongoose = require('mongoose');
 mongoose.set('debug', !settings.isProduction && settings.env !== 'test');
 mongoose.Promise = Promise;
 

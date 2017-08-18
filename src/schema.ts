@@ -1,4 +1,4 @@
-import { merge, concat } from 'lodash';
+import { concat, merge } from 'lodash';
 import { makeExecutableSchema } from 'graphql-tools';
 import { chatResolvers, settingsResolvers, userResolvers } from 'resolvers';
 import { chatSchema, settingsSchema, userSchema } from 'schemas';
@@ -13,11 +13,11 @@ type Query {
 }
 
 type Mutation {
-  createChannel(name: String!): Channel
+  createChannel(name: String!): Channel!
   createMessage(text: String!, channelId: String!): Message!
-  createUser(email: String! password: String!): User
-  createTokenByCode(code: String!): Token
-  createTokenByPassword(email: String! password: String!): Token
+  createUser(email: String! password: String!): User!
+  createTokenByCode(code: String!): Token!
+  createTokenByPassword(email: String! password: String!): Token!
 }
 
 type Subscription {
