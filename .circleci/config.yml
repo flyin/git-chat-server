@@ -37,6 +37,10 @@ jobs:
           name: Test application
           command: yarn run test -- --coverage
 
+      - run:
+          name: TSlint
+          command: yarn run lint
+
       - store_artifacts:
           path: coverage
           prefix: coverage

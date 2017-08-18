@@ -12,6 +12,7 @@ dbConnect().then(() => {
   logger.info(`Connected to: ${settings.mongoURL}`);
 
   server.listen(settings.apiPort, () => {
+    /* tslint:disable-next-line */
     new SubscriptionServer({
       execute,
       schema,

@@ -5,20 +5,20 @@ import * as bcrypt from 'bcrypt';
 const SALT_FACTOR = 5;
 
 export interface UserModel extends mongoose.Document {
-  avatar: string
-  email: string
-  github?: GithubModel
-  isAdmin: boolean
-  password: string
-  passwordIsValid: (password: string) => Promise<boolean>
+  avatar: string;
+  email: string;
+  github?: GithubModel;
+  isAdmin: boolean;
+  password: string;
+  passwordIsValid: (password: string) => Promise<boolean>;
 }
 
 export interface GithubModel extends mongoose.Document {
-  accessToken: string
-  githubId: number
-  name: string
-  refreshToken: string
-  scopes: [string]
+  accessToken: string;
+  githubId: number;
+  name: string;
+  refreshToken: string;
+  scopes: [string];
 }
 
 const Github = new mongoose.Schema({

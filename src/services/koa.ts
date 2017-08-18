@@ -13,7 +13,7 @@ const koa = new Koa();
 const router = new KoaRouter();
 
 export interface GraphQLContext {
-  currentUser: Promise<UserModel>
+  currentUser: Promise<UserModel>;
 }
 
 router.post('/', koaBody(), graphqlKoa(async () => ({

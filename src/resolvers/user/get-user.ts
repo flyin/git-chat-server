@@ -6,7 +6,7 @@ const User = mongoose.model<UserModel>('User');
 
 type Input = {
   userId?: string
-}
+};
 
 export default async (_: any, { userId }: Input, context: GraphQLContext) => {
   let currentUser: UserModel;

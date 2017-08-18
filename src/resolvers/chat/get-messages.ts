@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 
-
 const Message = mongoose.model('Message');
 
 export default (_: any, { channelId }: { channelId: string }) => {

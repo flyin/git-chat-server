@@ -11,7 +11,8 @@
     "build": "rimraf ./dist/ && tsc",
     "tsc:watch": "tsc -w",
     "test": "jest --forceExit",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -44,6 +45,7 @@
     "@types/jsonwebtoken": "^7.2.3",
     "@types/koa": "^2.0.39",
     "@types/lodash": "^4.14.73",
+    "@types/mongodb": "^2.2.10",
     "@types/mongoose": "^4.7.20",
     "@types/node": "^8.0.24",
     "@types/validator": "^6.2.2",
@@ -56,6 +58,8 @@
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "ts-jest": "^20.0.10",
+    "tslint": "^5.6.0",
+    "tslint-config-standard": "^6.0.1",
     "typescript": "^2.4.2"
   },
   "jest": {

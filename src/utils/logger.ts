@@ -4,11 +4,12 @@ import * as moment from 'moment';
 export default new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
-      formatter(options): string {
+      formatter (options): string {
+        /* tslint:disable-next-line */
         return `${options.timestamp()} ${options.level} [${process.env.APP_ENV || 'UNKNOW ENV'}] ${(options.message ? options.message : '')} ${options.meta && Object.keys(options.meta).length ? `\n\t${JSON.stringify(options.meta)}` : ''}`;
       },
 
-      timestamp() {
+      timestamp () {
         return moment().format();
       }
     })

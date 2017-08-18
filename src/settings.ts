@@ -1,24 +1,24 @@
 type Environment = 'test' | 'production' | 'development';
 
 interface GithubConfig {
-  callbackURL?: string,
-  clientId?: string,
-  clientSecret?: string
+  callbackURL?: string;
+  clientId?: string;
+  clientSecret?: string;
 }
 
 interface RedisConfig {
-  host: string,
-  port: number
+  host: string;
+  port: number;
 }
 
 interface Config {
-  apiPort: number,
-  env: Environment,
-  github: GithubConfig,
-  isProduction: boolean,
-  mongoURL: string,
-  redis: RedisConfig,
-  secret: string
+  apiPort: number;
+  env: Environment;
+  github: GithubConfig;
+  isProduction: boolean;
+  mongoURL: string;
+  redis: RedisConfig;
+  secret: string;
 }
 
 const env: Environment = (process.env.NODE_ENV || 'production') as Environment;

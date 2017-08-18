@@ -1,11 +1,11 @@
 import { mongoose } from 'services/mongoose';
 
-export function clearDatabase() {
-  return new Promise(resolve => {
-    for (const i in mongoose.connection.collections) {
-      mongoose.connection.collections[i].remove({});
-    }
+export function clearDatabase () {
+  const promises = [];
 
-    resolve();
-  });
+  for (const i in mongoose.connection.collections) {
+    promises.push(mongoose.connection.collections[i].remove({}));
+  }
+
+  return Promise.all(promises);
 }
