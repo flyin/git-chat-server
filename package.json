@@ -4,12 +4,13 @@
   "repository": "git@github.com:flyin/git-chat-example.git",
   "author": "flyin <alex@alex-web.ru>",
   "license": "MIT",
-  "main": "src/server.js",
+  "main": "bin/server.js",
   "scripts": {
-    "eslint": "eslint ./src",
-    "start": "pm2-docker process.yml",
-    "start:dev": "nodemon -e js --watch ./src --exec node src/server.js",
-    "test": "jest --coverage --forceExit --runInBand",
+    "start:dev": "concurrently 'npm run tsc:watch' 'npm run server:dev'",
+    "server:dev": "just-wait -p dist/server.js && NODE_PATH=./dist nodemon --watch dist bin/server.js",
+    "build": "tsc",
+    "tsc:watch": "tsc -w",
+    "test": "jest --forceExit",
     "test:watch": "jest --watch"
   },
   "dependencies": {
@@ -31,33 +32,61 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "mongoose": "4.11.7",
+    "ramda": "^0.24.1",
+    "source-map-support": "^0.4.15",
     "subscriptions-transport-ws": "^0.8.2",
     "validator": "^8.0.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^1.0.0",
+    "@types/graphql": "^0.10.2",
+    "@types/jest": "^20.0.7",
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/koa": "^2.0.39",
+    "@types/lodash": "^4.14.73",
+    "@types/mongoose": "^4.7.20",
+    "@types/node": "^8.0.24",
+    "@types/validator": "^6.2.2",
+    "@types/winston": "^2.3.4",
+    "@types/ws": "^3.0.2",
+    "concurrently": "^3.5.0",
     "eslint": "^4.4.1",
+    "flow-bin": "^0.53.0",
+    "flow-remove-types": "^1.2.1",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.4",
-    "nodemon": "^1.11.0"
+    "just-wait": "^1.0.11",
+    "nodemon": "^1.11.0",
+    "ts-jest": "^20.0.10",
+    "typescript": "^2.4.2"
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "src/**/*.ts"
     ],
     "coveragePathIgnorePatterns": [
       "/__tests__/",
-      "\\.(test|spec)\\.js$"
+      "\\.(test|spec)\\.ts$"
     ],
     "moduleFileExtensions": [
+      "ts",
       "js",
       "json"
     ],
-    "modulePaths": [
-      "<rootDir>/src"
+    "modulePathIgnorePatterns": [
+      "<rootDir>/(dist|tmp|cache)/"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/src/utils/test-setup.js",
+    "modulePaths": [
+      "<rootDir>/src/"
+    ],
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "setupFiles": [
+      "<rootDir>/src/utils/tests-setup.ts"
+    ],
     "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.js$"
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
   }
 }

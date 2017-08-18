@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`chat resolvers mutations should create channel 1`] = `
+Object {
+  "createChannel": Object {
+    "name": "test-foo",
+  },
+}
+`;
+
+exports[`chat resolvers mutations should create message 1`] = `
+Object {
+  "createMessage": Object {
+    "channel": Object {
+      "name": "some-channel",
+    },
+    "text": "Some message",
+  },
+}
+`;
+
+exports[`chat resolvers mutations should validate channel 1`] = `
+Array [
+  [GraphQLError: Variable "$name" got invalid value null.
+Expected "String!", found null.],
+]
+`;
+
+exports[`chat resolvers mutations should validate message 1`] = `
+Array [
+  [GraphQLError: Variable "$text" got invalid value null.
+Expected "String!", found null.],
+]
+`;
+
+exports[`chat resolvers queries should return all channels 1`] = `
+Object {
+  "getChannels": Array [
+    Object {
+      "name": "asasd",
+    },
+    Object {
+      "name": "test-foo",
+    },
+    Object {
+      "name": "test-foo1",
+    },
+  ],
+}
+`;
+
+exports[`chat resolvers queries should return channel by id 1`] = `
+Object {
+  "getChannel": Object {
+    "name": "test-foo",
+  },
+}
+`;
+
+exports[`message-message-1 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-1",
+}
+`;
+
+exports[`message-message-2 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-2",
+}
+`;
+
+exports[`message-message-3 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-3",
+}
+`;
+
+exports[`message-message-4 1`] = `
+Object {
+  "channel": Object {
+    "name": "some-channel",
+  },
+  "text": "message-4",
+}
+`;
