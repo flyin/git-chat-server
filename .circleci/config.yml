@@ -35,7 +35,7 @@ jobs:
 
       - run:
           name: Test application
-          command: yarn run test
+          command: yarn run test -- --coverage
 
       - store_artifacts:
           path: coverage
