@@ -46,7 +46,10 @@ const config: Config = {
   ...({
     production: {},
     development: {},
-    test: {}
+
+    test: {
+      mongoURL: process.env.TEST_MONGO_URL || 'mongodb://localhost/git-chat-test'
+    }
   }[env])
 };
 
