@@ -9,6 +9,7 @@ jobs:
           NODE_ENV: test
 
       - image: mongo:3.4.5
+      - image: redis:latest
 
     steps:
       - checkout
