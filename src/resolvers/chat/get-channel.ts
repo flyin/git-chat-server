@@ -1,6 +1,4 @@
-import * as mongoose from 'mongoose';
-
-const Channel = mongoose.model('Channel');
+import { Channel } from 'models';
 
 export default (_: any, { channelId }: { channelId: string }) => {
   return Channel.findById(channelId);

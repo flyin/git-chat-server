@@ -1,6 +1,7 @@
 export default [`
 type Github {
   _id: ID!
+  avatar: String
   githubId: ID!
   name: String,
   scopes: String
@@ -8,7 +9,6 @@ type Github {
 
 type User {
   _id: ID!
-  avatar: String
   isAdmin: Boolean
   email: String!
   github: Github

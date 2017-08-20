@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const schema = new Schema({
+const Message = new Schema({
   channel: {
     _id: {
       ref: 'Channel',
@@ -17,4 +17,4 @@ const schema = new Schema({
   timestamps: true
 });
 
-mongoose.model('Message', schema);
+export default mongoose.model('Message', Message);

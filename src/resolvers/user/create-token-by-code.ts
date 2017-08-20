@@ -1,64 +1,49 @@
-// import Axios from 'axios';
-// import { find, get } from 'lodash';
-// import { mongoose } from 'services/mongoose';
-// import * as GitHubApi from 'github';
-// import settings from 'settings';
+import signUser from './helpers/sign-user';
+import { User } from 'models';
+import { GraphQLContext } from 'services';
+import { githubCreateClient, githubGetPrimaryEmail, githubGetToken, githubGetUser } from 'helpers';
 
-// const User = mongoose.model('User');
+type Input = {
+  code: string
+};
 
-export default async (_: any /*{ code }: { code: string }*/) => {
-  return Promise.reject({ err: new Error('Not implemented yet') });
+export default async (_: any, { code }: Input, context: GraphQLContext) => {
+  const oauth = await githubGetToken(code);
 
-  /*
-  const response = await Axios({
-    data: {
-      client_id: settings.github.clientId,
-      client_secret: settings.github.clientSecret,
-      code
-    },
-
-    headers: {
-      'Accept': 'application/json'
-    },
-
-    method: 'post',
-    url: 'https://github.com/login/oauth/access_token'
-  });
-
-  if (!response.data.access_token) {
-    throw new Error(get(response.data, 'error_description', 'oauth_receive_error'));
+  if (!oauth.access_token) {
+    throw new Error('access_token_error');
   }
 
-  const client = createGithubClient();
-  client.authenticate({ token: response.data.access_token, type: 'oauth' });
-  const userResponse = await client.users.get({});
-  let emailsResponse;
+  const client = githubCreateClient(oauth.access_token);
+  const githubUser = await githubGetUser(client);
+  const primaryEmail = await githubGetPrimaryEmail(client);
+  const currentUser = await context.currentUser;
 
-  if (!userResponse.data.email) {
-    emailsResponse = await client.users.getEmails({ page: 1 });
-  }
-
-  return User.findOneAndUpdate(
-    { email: userResponse.data.email || (find(emailsResponse.data, { primary: true, verified: true }) || {email: ''}).email },
+  const user = await User.findOneAndUpdate(
+    { $or: [{ _id: currentUser ? currentUser._id : null }, { 'github.githubId': githubUser.id }, { email: primaryEmail.email }] },
 
     {
-      avatar: userResponse.data.avatar_url,
+      $setOnInsert: {
+        email: primaryEmail.email
+      },
 
-      github: {
-        accessToken: response.data.access_token,
-        githubId: userResponse.data.id,
-        name: userResponse.data.name,
-        scopes: userResponse.data.scopes
+      $set: {
+        github: {
+          avatar: githubUser.avatar_url,
+          accessToken: oauth.access_token,
+          githubId: githubUser.id,
+          name: githubUser.name,
+          scope: oauth.scope
+        }
       }
     },
 
     { new: true, upsert: true }
   );
-  */
-};
 
-/*
-function createGithubClient() {
-  return new GitHubApi({ debug: !settings.isProduction, headers: { 'user-agent': '@flyin/git-chat-server' } });
-}
-*/
+  if (!user) {
+    throw new Error('user_find_and_update_error');
+  }
+
+  return signUser(user);
+};

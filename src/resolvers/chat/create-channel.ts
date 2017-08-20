@@ -1,7 +1,5 @@
-import { mongoose } from 'services/mongoose';
+import { Channel } from 'models';
 import pubsub from 'services/subscriptions';
-
-const Channel = mongoose.model('Channel');
 
 export default async (_: any, { name }: { name: string }) => {
   // const currentUser = await context.currentUser.get();

@@ -1,8 +1,5 @@
-import * as mongoose from 'mongoose';
+import { User } from 'models';
 import signUser from './helpers/sign-user';
-import { UserModel } from 'models/user';
-
-const User = mongoose.model<UserModel>('User');
 
 export default async (_: any, { email, password }: { email: string, password: string }) => {
   const user = await User.findOne({ email });

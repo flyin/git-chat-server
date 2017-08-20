@@ -45,15 +45,39 @@
   dependencies:
     "@types/node" "*"
 
+"@types/kcors@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@types/kcors/-/kcors-2.2.1.tgz#bc622accc6476bb8b6b9e21a084e733139ae9249"
+  dependencies:
+    "@types/koa" "*"
+
 "@types/keygrip@*":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
+
+"@types/koa-bodyparser@^3.0.23":
+  version "3.0.23"
+  resolved "https://registry.yarnpkg.com/@types/koa-bodyparser/-/koa-bodyparser-3.0.23.tgz#0e719b708d463d1ea31a25971c485c2e4eb6ced4"
+  dependencies:
+    "@types/koa" "*"
 
 "@types/koa-compose@*":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
 
-"@types/koa@^2.0.39":
+"@types/koa-logger@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/koa-logger/-/koa-logger-2.0.2.tgz#15538a07c5fbfdecdb9c4c7b59de0d2f8be37bf2"
+  dependencies:
+    "@types/koa" "*"
+
+"@types/koa-router@^7.0.22":
+  version "7.0.22"
+  resolved "https://registry.yarnpkg.com/@types/koa-router/-/koa-router-7.0.22.tgz#92b4b533f074036250892fe35bb6329ee9242def"
+  dependencies:
+    "@types/koa" "*"
+
+"@types/koa@*", "@types/koa@^2.0.39":
   version "2.0.39"
   resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.39.tgz#45ba1249d8849b9b0ff8c1d6d2f80b0838b89ffa"
   dependencies:
