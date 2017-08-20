@@ -1,23 +1,39 @@
+import { IncomingHttpHeaders } from 'http';
+import { get } from 'lodash';
+import * as jwt from 'jsonwebtoken';
 import * as Koa from 'koa';
+import * as KoaRouter from 'koa-router';
+import * as koaCors from 'kcors';
+import * as koaBody from 'koa-bodyparser';
+import * as koaLogger from 'koa-logger';
+import { graphiqlKoa, graphqlKoa } from 'graphql-server-koa';
 import settings from 'settings';
-import { UserModel } from 'models/user';
-
-const KoaRouter = require('koa-router');
-const koaCors = require('kcors');
-const koaBody = require('koa-bodyparser');
-const koaLogger = require('koa-logger');
-const { graphqlKoa, graphiqlKoa } = require('graphql-server-koa');
-const schema = require('../schema');
+import schema from 'schema';
+import { User } from 'models';
 
 const koa = new Koa();
 const router = new KoaRouter();
 
-export interface GraphQLContext {
-  currentUser: Promise<UserModel>;
-}
+type JWTPayload = {
+  userId: string;
+};
 
-router.post('/', koaBody(), graphqlKoa(async () => ({
-  // context: { currentUser: getRequestUser({ headers: ctx.req.headers, query: ctx.query }) },
+const getRequestUser = (headers: IncomingHttpHeaders, query: any) => {
+  const token: string = get(headers, 'authorization') || get(query, 'access_token');
+
+  try {
+    const payload: JWTPayload = jwt.verify(token, settings.secret) as JWTPayload;
+    return User.findOne({ _id: payload.userId });
+  } catch (err) {
+    return Promise.resolve(null);
+  }
+};
+
+router.post('/', koaBody(), graphqlKoa(async (ctx: Koa.Context) => ({
+  context: {
+    currentUser: getRequestUser(ctx.req.headers, ctx.query)
+  },
+
   schema
 })));
 

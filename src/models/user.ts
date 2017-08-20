@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 const SALT_FACTOR = 5;
 
 export interface UserModel extends mongoose.Document {
-  avatar: string;
   email: string;
   github?: GithubModel;
   isAdmin: boolean;
@@ -14,6 +13,7 @@ export interface UserModel extends mongoose.Document {
 }
 
 export interface GithubModel extends mongoose.Document {
+  avatar: string;
   accessToken: string;
   githubId: number;
   name: string;
@@ -22,16 +22,15 @@ export interface GithubModel extends mongoose.Document {
 }
 
 const Github = new mongoose.Schema({
+  avatar: { default: null, type: String },
   accessToken: { required: true, type: String },
-  githubId: { required: true, type: Number },
+  githubId: { required: true, type: Number, index: true },
   name: { default: null, type: String },
   refreshToken: { default: null, type: String },
   scopes: { type: [String] }
 });
 
-const user = new mongoose.Schema({
-  avatar: { default: null, type: String },
-
+const User = new mongoose.Schema({
   email: {
     required: true,
     trim: true,
@@ -51,7 +50,7 @@ const user = new mongoose.Schema({
   timestamps: true
 });
 
-user.pre('save', async function (this: UserModel, next) {
+User.pre('save', async function (this: UserModel, next) {
   if (!this.isModified('password') && this.password) {
     return next();
   }
@@ -67,8 +66,8 @@ user.pre('save', async function (this: UserModel, next) {
   }
 });
 
-user.methods.passwordIsValid = async function (this: UserModel, password: string) {
+User.methods.passwordIsValid = async function (this: UserModel, password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-mongoose.model<UserModel>('User', user);
+export default mongoose.model<UserModel>('User', User);

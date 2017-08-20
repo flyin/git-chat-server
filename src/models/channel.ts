@@ -17,4 +17,4 @@ const Channel = new Schema({
   timestamps: true
 });
 
-mongoose.model('Channel', Channel);
+export default mongoose.model('Channel', Channel);

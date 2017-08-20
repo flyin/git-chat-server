@@ -1,8 +1,5 @@
-import { mongoose } from 'services/mongoose';
+import { Message, Channel } from 'models';
 import pubsub from 'services/subscriptions';
-
-const Message = mongoose.model('Message');
-const Channel = mongoose.model('Channel');
 
 export default async (_: any, { channelId, text }: { channelId: string, text: string }) => {
   const channel = await Channel.findById(channelId);
